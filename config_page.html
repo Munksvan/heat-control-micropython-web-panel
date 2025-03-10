@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>Configuration</h1>
+    <form action="/save_config" method="POST">
+        <h2>Sensors</h2>
+        <div id="sensors">
+            {% for sensor in detected_sensors %}
+            <div>
+                <input type="text" name="sensor_id[]" value="{{ sensor.id }}" readonly>
+                <input type="text" name="sensor_name[]" value="{{ sensor.name }}" placeholder="Sensor Name">
+            </div>
+            {% endfor %}
+        </div>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

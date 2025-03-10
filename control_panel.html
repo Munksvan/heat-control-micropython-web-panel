@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style>
+        .valve-container {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        .progress-bar {
+            width: 20px;
+            height: 100px;
+            background-color: #ddd;
+            position: relative;
+            transform: rotate(180deg); /* Gör den vertikal */
+        }
+        .progress-fill {
+            width: 100%;
+            background-color: #4CAF50;
+            position: absolute;
+            bottom: 0;
+        }
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: white;
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    
+    <div>
+        <h2>Temperatures</h2>
+        {% for sensor in sensors %}
+        <div>{{ sensor.name }}: {{ sensor.value }} °C</div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <h2>Valves</h2>
+        {% for valve in valves %}
+        <div class="valve-container">
+            <div>{{ valve.id }}</div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="height: {{ valve.position }}%;"></div>
+                <div class="progress-text">{{ valve.position }}%</div>
+            </div>
+            <button onclick="sendCommand('open_{{ valve.id }}')">Open</button>
+            <button onclick="sendCommand('close_{{ valve.id }}')">Close</button>
+            <button onclick="sendCommand('stop_{{ valve.id }}')">Stop</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <a href="/config">Configure Sensors</a>
+    </div>
+
+    <script>
+    function sendCommand(command) {
+        fetch('/command?command=' + command)
+            .then(response => response.text())
+            .then(data => console.log(data));
+    }
+    </script>
+</body>
+</html>
